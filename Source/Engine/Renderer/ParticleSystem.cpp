@@ -1,20 +1,20 @@
 #include "ParticleSystem.h"
 #include "Renderer.h"
 
-namespace viper {
+namespace Rex {
 	bool ParticleSystem::Initialize(int poolSize) {
 		// reserve particles in pool
-		m_particles.resize(poolSize);
+		s_particles.resize(poolSize);
 
 		return true;
 	}
 	
 	void ParticleSystem::Shutdown() {
-		m_particles.clear();
+		s_particles.clear();
 	}
 
 	void ParticleSystem::Update(float dt) {
-		for (auto& particle : m_particles) {
+		for (auto& particle : s_particles) {
 			if (particle.active) {
 				particle.lifespan -= dt;
 				particle.active = (particle.lifespan > 0);
@@ -25,7 +25,7 @@ namespace viper {
 	}
 
 	void ParticleSystem::Draw(class Renderer& renderer) {
-		for (auto& particle : m_particles) {
+		for (auto& particle : s_particles) {
 			if (particle.active) {
 				renderer.SetColor(particle.color.r, particle.color.g, particle.color.b);
 				renderer.DrawLine(particle.position.x, particle.position.y, particle.prevPosition.x, particle.prevPosition.y);
@@ -44,7 +44,7 @@ namespace viper {
 	}
 
 	Particle* ParticleSystem::GetFreeParticle()	{
-		for (auto& particle : m_particles) {
+		for (auto& particle : s_particles) {
 			if (!particle.active) return &particle;
 		}
 

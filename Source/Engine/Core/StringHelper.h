@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 
-namespace viper {
+namespace Rex {
 	/// <summary>
 	/// Converts all characters in a string to lowercase.
 	/// </summary>

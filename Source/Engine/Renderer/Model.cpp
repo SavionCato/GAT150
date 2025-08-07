@@ -1,19 +1,19 @@
 #include "Model.h"
 #include "Renderer.h"
 
-namespace viper {
+namespace Rex {
 	/// <summary>
 	/// Draws the model by rendering lines between its points using the specified renderer.
 	/// </summary>
 	/// <param name="renderer">The Renderer object used to draw the model.</param>
 	void Model::Draw(class Renderer& renderer, const vec2& position, float rotation, float scale) {
-		if (m_points.empty()) return;
+		if (s_points.empty()) return;
 
-		renderer.SetColor(m_color.r, m_color.g, m_color.b);
+		renderer.SetColor(s_color.r, s_color.g, s_color.b);
 		// iterate through all points, draw line
-		for (int i = 0; i < m_points.size() - 1; i++) {
-			vec2 p1 = (m_points[i].Rotate(math::degToRad(rotation)) * scale) + position;
-			vec2 p2 = (m_points[i + 1].Rotate(math::degToRad(rotation)) * scale) + position;
+		for (int i = 0; i < s_points.size() - 1; i++) {
+			vec2 p1 = (s_points[i].Rotate(math::degToRad(rotation)) * scale) + position;
+			vec2 p2 = (s_points[i + 1].Rotate(math::degToRad(rotation)) * scale) + position;
 
 			renderer.DrawLine(p1.x, p1.y, p2.x, p2.y);
 		}
@@ -33,10 +33,10 @@ namespace viper {
 	/// </summary>
 	void Model::CalculateRadius()
 	{
-		m_radius = 0;
-		for (auto& point : m_points) {
+		s_radius = 0;
+		for (auto& point : s_points) {
 			float length = point.Length();
-			if (length > m_radius) m_radius = length;
+			if (length > s_radius) s_radius = length;
 		}
 	}
 }

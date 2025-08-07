@@ -1,7 +1,7 @@
 #pragma once
 #include "Vector2.h"
 
-namespace viper {
+namespace Rex {
 	struct Transform {
 		vec2 position{ 0, 0 };
 		float rotation = 0;

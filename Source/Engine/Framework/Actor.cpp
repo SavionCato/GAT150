@@ -1,7 +1,7 @@
 #include "Actor.h"
 #include "../Renderer/Model.h"
 
-namespace viper {
+namespace Rex {
 	void Actor::Update(float dt)
 	{
 		if (destroyed) return;
@@ -19,11 +19,11 @@ namespace viper {
 	{
 		if (destroyed) return;
 
-		m_model->Draw(renderer, transform);
+		s_model->Draw(renderer, transform);
 	}
 
 	float Actor::GetRadius()
 	{
-		return (m_model) ? m_model->GetRadius() * transform.scale * 0.9f : 0;
+		return (s_model) ? s_model->GetRadius() * transform.scale * 0.9f : 0;
 	}
 }

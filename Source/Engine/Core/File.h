@@ -1,7 +1,7 @@
 #pragma once
 #include <filesystem>
 
-namespace viper::file {
+namespace Rex::file {
     std::string GetCurrentDirectory();
     bool SetCurrentDirectory(const std::string& path);
     std::string GetExtension(const std::string& path);

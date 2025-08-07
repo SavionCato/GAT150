@@ -1,7 +1,7 @@
 #pragma once
 #include "Framework/Actor.h"
 
-class Player : public viper::Actor {
+class Player : public Rex::Actor {
 public:
 	float speed = 200;
 	float rotationRate = 180;
@@ -10,7 +10,7 @@ public:
 
 public:
 	Player() = default;
-	Player(const viper::Transform& transform, std::shared_ptr<viper::Model> model) :
+	Player(const Rex::Transform& transform, std::shared_ptr<Rex::Model> model) :
 		Actor{ transform, model }
 	{}
 

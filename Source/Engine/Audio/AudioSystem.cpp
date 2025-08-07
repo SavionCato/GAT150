@@ -3,7 +3,7 @@
 #include <fmod_errors.h>
 #include <iostream>
 
-namespace viper {
+namespace Rex {
 	/// <summary>
 	/// Checks if an FMOD operation was successful and logs an error message if it was not.
 	/// </summary>
@@ -24,11 +24,11 @@ namespace viper {
 	/// <returns>True if the audio system was successfully initialized; otherwise, false.</returns>
 	bool AudioSystem::Initialize() {
 
-		FMOD_RESULT result = FMOD::System_Create(&m_system);
+		FMOD_RESULT result = FMOD::System_Create(&s_system);
 		if (!CheckFMODResult(result)) return false;
 
 		void* extradriverdata = nullptr;
-		result = m_system->init(32, FMOD_INIT_NORMAL, extradriverdata);
+		result = s_system->init(32, FMOD_INIT_NORMAL, extradriverdata);
 		if (!CheckFMODResult(result)) return false;
 
 		return true;
@@ -38,14 +38,14 @@ namespace viper {
 	/// Shuts down the audio system and releases associated resources.
 	/// </summary>
 	void AudioSystem::Shutdown() {
-		CheckFMODResult(m_system->release());
+		CheckFMODResult(s_system->release());
 	}
 
 	/// <summary>
 	/// Updates the audio system state by processing pending audio operations.
 	/// </summary>
 	void AudioSystem::Update() {
-		CheckFMODResult(m_system->update());
+		CheckFMODResult(s_system->update());
 	}
 
 	/// <summary>
@@ -60,18 +60,18 @@ namespace viper {
 		key = tolower(key);
 
 		// check if key exists in sounds map
-		if (m_sounds.find(key) != m_sounds.end()) {
+		if (s_sounds.find(key) != s_sounds.end()) {
 			std::cerr << "Audio System : name already exists " << key << std::endl;
 			return false;
 		}
 
 		// create sound from key
 		FMOD::Sound* sound = nullptr;
-		FMOD_RESULT result = m_system->createSound(filename.c_str(), FMOD_DEFAULT, 0, &sound);
+		FMOD_RESULT result = s_system->createSound(filename.c_str(), FMOD_DEFAULT, 0, &sound);
 		if (!CheckFMODResult(result)) return false;
 
 		// insert sound into map
-		m_sounds[key] = sound;
+		s_sounds[key] = sound;
 
 		return true;
 	}
@@ -82,13 +82,13 @@ namespace viper {
 		key = tolower(key);
 
 		// check if sound exists in sounds map
-		if (m_sounds.find(key) == m_sounds.end()) {
+		if (s_sounds.find(key) == s_sounds.end()) {
 			std::cerr << "Audio System : name doesn't exists " << key << std::endl;
 			return false;
 		}
 
 		// play sound from key
-		FMOD_RESULT result = m_system->playSound(m_sounds[key], 0, false, nullptr);
+		FMOD_RESULT result = s_system->playSound(s_sounds[key], 0, false, nullptr);
 		if (!CheckFMODResult(result)) return false;
 
 		return true;

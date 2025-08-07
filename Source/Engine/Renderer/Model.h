@@ -3,13 +3,13 @@
 #include "../Math/Transform.h"
 #include <vector>
 
-namespace viper {
+namespace Rex {
 	class Model {
 	public:
 		Model() = default;
 		Model(const std::vector<vec2> points, const vec3& color) :
-			m_points{ points },
-			m_color{ color }
+			s_points{ points },
+			s_color{ color }
 		{
 			CalculateRadius();
 		}
@@ -17,14 +17,14 @@ namespace viper {
 		void Draw(class Renderer& renderer, const vec2& position, float rotation, float scale);
 		void Draw(class Renderer& renderer, const Transform& transform);
 
-		float GetRadius() const { return m_radius; }
+		float GetRadius() const { return s_radius; }
 
 	private:
 		void CalculateRadius();
 
 	private:
-		float m_radius{ 0 };
-		std::vector<vec2> m_points;
-		vec3 m_color{ 1, 1, 1 };
+		float s_radius{ 0 };
+		std::vector<vec2> s_points;
+		vec3 s_color{ 1, 1, 1 };
 	};
 }

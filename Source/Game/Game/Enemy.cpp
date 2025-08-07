@@ -18,36 +18,36 @@ void Enemy::Update(float dt)
 
     Player* player = scene->GetActorByName<Player>("player");
     if (player) {
-        viper::vec2 direction{ 0, 0 };
+        Rex::vec2 direction{ 0, 0 };
         direction = player->transform.position - transform.position;
 
         direction = direction.Normalized();
-        viper::vec2 forward = viper::vec2{ 1, 0 }.Rotate(viper::math::degToRad(transform.rotation));
+        Rex::vec2 forward = Rex::vec2{ 1, 0 }.Rotate(Rex::math::degToRad(transform.rotation));
 
-        float angle = viper::math::radToDeg(viper::vec2::AngleBetween(forward, direction));
+        float angle = Rex::math::radToDeg(Rex::vec2::AngleBetween(forward, direction));
         playerSeen = angle <= 30;
 
         if (playerSeen) {
-            float angle = viper::vec2::SignedAngleBetween(forward, direction);
-            angle = viper::math::sign(angle);
-            transform.rotation += viper::math::radToDeg(angle * 5 * dt);
+            float angle = Rex::vec2::SignedAngleBetween(forward, direction);
+            angle = Rex::math::sign(angle);
+            transform.rotation += Rex::math::radToDeg(angle * 5 * dt);
         }
     }
 
-    viper::vec2 force = viper::vec2{ 1, 0 }.Rotate(viper::math::degToRad(transform.rotation)) * speed;
+    Rex::vec2 force = Rex::vec2{ 1, 0 }.Rotate(Rex::math::degToRad(transform.rotation)) * speed;
     velocity += force * dt;
 
-    transform.position.x = viper::math::wrap(transform.position.x, 0.0f, (float)viper::GetEngine().GetRenderer().GetWidth());
-    transform.position.y = viper::math::wrap(transform.position.y, 0.0f, (float)viper::GetEngine().GetRenderer().GetHeight());
+    transform.position.x = Rex::math::wrap(transform.position.x, 0.0f, (float)Rex::GetEngine().GetRenderer().GetWidth());
+    transform.position.y = Rex::math::wrap(transform.position.y, 0.0f, (float)Rex::GetEngine().GetRenderer().GetHeight());
 
     // check fire
     fireTimer -= dt;
     if (fireTimer <= 0 && playerSeen) {
         fireTimer = fireTime;
 
-        std::shared_ptr<viper::Model> model = std::make_shared<viper::Model>(GameData::shipPoints, viper::vec3{ 0.0f, 1.0f, 0.0f });
+        std::shared_ptr<Rex::Model> model = std::make_shared<Rex::Model>(GameData::shipPoints, Rex::vec3{ 0.0f, 1.0f, 0.0f });
         // spawn rocket at player position and rotation
-        viper::Transform transform{ this->transform.position, this->transform.rotation, 2.0f };
+        Rex::Transform transform{ this->transform.position, this->transform.rotation, 2.0f };
         auto rocket = std::make_unique<Rocket>(transform, model);
         rocket->speed = 500.0f;
         rocket->lifespan = 1.5f;
@@ -66,13 +66,13 @@ void Enemy::OnCollision(Actor* other)
         destroyed = true;
         scene->GetGame()->AddPoints(100);
         for (int i = 0; i < 100; i++) {
-            viper::Particle particle;
+            Rex::Particle particle;
             particle.position = transform.position;
-            particle.velocity = viper::random::onUnitCircle() * viper::random::getReal(10.0f, 200.0f);
-            particle.color = viper::vec3{ 1, 1, 1 };
+            particle.velocity = Rex::random::onUnitCircle() * Rex::random::getReal(10.0f, 200.0f);
+            particle.color = Rex::vec3{ 1, 1, 1 };
             particle.lifespan = 2;
 
-            viper::GetEngine().GetPS().AddParticle(particle);
+            Rex::GetEngine().GetPS().AddParticle(particle);
         }
     }
 }

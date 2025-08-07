@@ -2,16 +2,16 @@
 #include <SDL3_ttf/SDL_ttf.h>
 #include <iostream>
 
-namespace viper {
+namespace Rex {
 	Font::~Font() {
-		if (m_ttfFont != nullptr) {
-			TTF_CloseFont(m_ttfFont);
+		if (s_ttfFont != nullptr) {
+			TTF_CloseFont(s_ttfFont);
 		}
 	}
 
 	bool Font::Load(const std::string& name, float fontSize) {
-		m_ttfFont = TTF_OpenFont(name.c_str(), fontSize);
-		if (m_ttfFont == nullptr) {
+		s_ttfFont = TTF_OpenFont(name.c_str(), fontSize);
+		if (s_ttfFont == nullptr) {
 			std::cerr << "Could not load font: " << name << std::endl;
 			return false;
 		}

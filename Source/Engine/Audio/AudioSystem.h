@@ -3,7 +3,7 @@
 #include <string>
 #include <map>
 
-namespace viper {
+namespace Rex {
 	class AudioSystem {
 	public:
 		AudioSystem() = default;
@@ -20,8 +20,8 @@ namespace viper {
 		bool CheckFMODResult(FMOD_RESULT result);
 
 	private:
-		FMOD::System* m_system = nullptr;
-		std::map<std::string, FMOD::Sound*> m_sounds;
+		FMOD::System* s_system = nullptr;
+		std::map<std::string, FMOD::Sound*> s_sounds;
 	};
 
 }

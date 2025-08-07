@@ -1,16 +1,29 @@
 #pragma once
 #include "Core/Time.h"
+#include "Core/Singleton.h"
+#include "Renderer/Renderer.h"
+#include "Input/InputSystem.h"
+#include "Audio/AudioSystem.h"
+#include "Renderer/ParticleSystem.h"
+#include "Resources/ResourceManager.h"
+
 #include <memory>
 
-namespace viper {
+namespace Rex {
+
 	class Renderer;
 	class AudioSystem;
 	class InputSystem;
 	class ParticleSystem;
 
-	class Engine {
+	class Engine : Singleton<Engine> {
 	public:
-		Engine() = default;
+
+		static Engine& Instance() {
+
+			static Engine instance;
+			return instance;
+		}
 
 		bool Initialize();
 		void Shutdown();
@@ -18,22 +31,26 @@ namespace viper {
 		void Update();
 		void Draw();
 
-		Renderer& GetRenderer() { return *m_renderer; }
-		AudioSystem& GetAudio() { return *m_audio; }
-		InputSystem& GetInput() { return *m_input; }
-		ParticleSystem& GetPS() { return *m_particleSystem;  }
+		Renderer& GetRenderer() { return *s_renderer; }
+		AudioSystem& GetAudio() { return *s_audio; }
+		InputSystem& GetInput() { return *s_input; }
+		ParticleSystem& GetPS() { return *s_particleSystem;  }
 
-		Time& GetTime() { return m_time; }
-
+		Time& GetTime() { return s_time; }
 	private:
-		Time m_time;
 
-		std::unique_ptr<Renderer> m_renderer;
-		std::unique_ptr<AudioSystem> m_audio;
-		std::unique_ptr<InputSystem> m_input;
-		std::unique_ptr<ParticleSystem> m_particleSystem;
+		friend class Singleton;
+
+		Engine() = default;
+
+		Time s_time;
+
+		std::unique_ptr<Renderer> s_renderer;
+		std::unique_ptr<AudioSystem> s_audio;
+		std::unique_ptr<InputSystem> s_input;
+		std::unique_ptr<ParticleSystem> s_particleSystem;
 	};
 
-	Engine& GetEngine();
+	inline Engine& GetEngine() { return Engine::Instance(); }
 	inline Renderer& GetRenderer() { return GetEngine().GetRenderer(); }
 }

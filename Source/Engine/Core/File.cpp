@@ -2,7 +2,7 @@
 #include <iostream>
 #include <fstream>
 
-namespace viper::file {
+namespace Rex::file {
     /// <summary>
     /// Retrieves the current working directory as a string.
     /// </summary>

@@ -3,7 +3,7 @@
 #include "../Math/Vector3.h"
 #include <vector>
 
-namespace viper {
+namespace Rex {
 	struct Particle {
 		bool active{ false };
 		float lifespan{ 1 };
@@ -30,6 +30,6 @@ namespace viper {
 		Particle* GetFreeParticle();
 
 	private:
-		std::vector<Particle> m_particles;
+		std::vector<Particle> s_particles;
 	};
 }

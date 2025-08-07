@@ -1,11 +1,11 @@
 #include "Time.h"
 
-namespace viper {
+namespace Rex {
 	void Time::Tick()
 	{
 		clock::time_point now = clock::now();
-		m_time = std::chrono::duration<float>(now - m_startTime).count();
-		m_deltaTime = std::chrono::duration<float>(now - m_frameTime).count();
-		m_frameTime = now;
+		s_time = std::chrono::duration<float>(now - s_startTime).count();
+		s_deltaTime = std::chrono::duration<float>(now - s_frameTime).count();
+		s_frameTime = now;
 	}
 }

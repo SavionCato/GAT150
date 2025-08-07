@@ -1,5 +1,5 @@
 #include "Game.h"
 
-namespace viper {
+namespace Rex {
 
 }

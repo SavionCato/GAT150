@@ -3,8 +3,9 @@
 #include "Renderer/Font.h"
 #include "Renderer/Text.h"
 
-class SpaceGame : public viper::Game {
+class SpaceGame : public Rex::Game {
 public:
+
 	enum class GameState {
 		Initialize,
 		Title,
@@ -16,28 +17,29 @@ public:
 	};
 
 public:
+
 	SpaceGame() = default;
 
 	bool Initialize() override;
 	void Shutdown() override;
 
 	void Update(float dt) override;
-	void Draw(class viper::Renderer& renderer) override;
+	void Draw(class Rex::Renderer& renderer) override;
 
 	void OnPlayerDeath();
-
 private:
+
 	void SpawnEnemy();
-
 private:
-	GameState m_gameState = GameState::Initialize;
-	float m_enemySpawnTimer{ 0 };
-	float m_stateTimer{ 0 };
 
-	std::shared_ptr<class viper::Font> m_titleFont;
-	std::shared_ptr<class viper::Font> m_uiFont;
+	GameState s_gameState = GameState::Initialize;
+	float s_enemySpawnTimer{ 0 };
+	float s_stateTimer{ 0 };
+
+	std::shared_ptr<class Rex::Font> s_titleFont;
+	std::shared_ptr<class Rex::Font> s_uiFont;
 	
-	std::unique_ptr<class viper::Text> m_titleText;
-	std::unique_ptr<class viper::Text> m_scoreText;
-	std::unique_ptr<class viper::Text> m_livesText;
+	std::unique_ptr<class Rex::Text> s_titleText;
+	std::unique_ptr<class Rex::Text> s_scoreText;
+	std::unique_ptr<class Rex::Text> s_livesText;
 };

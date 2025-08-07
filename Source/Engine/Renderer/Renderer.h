@@ -1,12 +1,15 @@
 #pragma once
+#include "Renderer/Texture.h"
+
 #include <SDL3/SDL.h>
 #include <SDL3_ttf/SDL_ttf.h>
+#include <SDL3_image/SDL_image.h>
 #include <iostream>
 
-namespace viper {
-	class Renderer
-	{
+namespace Rex {
+	class Renderer {
 	public:
+
 		Renderer() = default;
 
 		bool Initialize();
@@ -21,17 +24,19 @@ namespace viper {
 
 		void DrawLine(float x1, float y1, float x2, float y2);
 		void DrawPoint(float x, float y);
+		void DrawTexture(class Texture* texture, float x, float y, float angle = 0);
 
-		int GetWidth() const { return m_width; }
-		int GetHeight() const { return m_height; }
-
+		int GetWidth() const { return s_width; }
+		int GetHeight() const { return s_height; }
 	private:
+
 		friend class Text;
+		friend class Texture;
 
-		int m_width{ 0 };
-		int m_height{ 0 };
+		int s_width{ 0 };
+		int s_height{ 0 };
 
-		SDL_Window* m_window = nullptr;
-		SDL_Renderer* m_renderer = nullptr;
+		SDL_Window* s_window = nullptr;
+		SDL_Renderer* s_renderer = nullptr;
 	};
 }

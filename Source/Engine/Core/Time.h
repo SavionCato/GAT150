@@ -1,31 +1,31 @@
 #pragma once
 #include <chrono>
 
-namespace viper {
+namespace Rex {
 	class Time {
 	private:
 		using clock = std::chrono::high_resolution_clock;
 
 	public:
 		Time() {
-			m_startTime = clock::now();
-			m_frameTime = clock::now();
+			s_startTime = clock::now();
+			s_frameTime = clock::now();
 		}
 
 		void Tick();
-		void Reset() { m_startTime = clock::now(); }
+		void Reset() { s_startTime = clock::now(); }
 
-		float GetTime() const { return m_time; }
-		float GetDeltaTime() const { return m_deltaTime * m_timeScale; }
+		float GetTime() const { return s_time; }
+		float GetDeltaTime() const { return s_deltaTime * s_timeScale; }
 
-		void SetTimeScale(float timeScale) { m_timeScale = timeScale; }
+		void SetTimeScale(float timeScale) { s_timeScale = timeScale; }
 
 	private:
-		float m_time = 0;
-		float m_deltaTime = 0;
-		float m_timeScale = 1;
+		float s_time = 0;
+		float s_deltaTime = 0;
+		float s_timeScale = 1;
 
-		clock::time_point m_startTime;
-		clock::time_point m_frameTime;
+		clock::time_point s_startTime;
+		clock::time_point s_frameTime;
 	};
 }

@@ -12,6 +12,8 @@
 #include "Framework/Scene.h"
 #include "Core/File.h"
 #include "Engine.h"
+#include "Resources/ResourceManager.h"
+#include "Renderer/Texture.h"
 
 #include "Game/Player.h"
 #include "Game/SpaceGame.h"
@@ -22,26 +24,28 @@
 
 int main(int argc, char* argv[]) {
 
-    viper::file::SetCurrentDirectory("Assets");
+    Rex::file::SetCurrentDirectory("Assets");
     
-    // initialize engine
-    viper::GetEngine().Initialize();
+    Rex::GetEngine().Initialize();
 
-    // initialize game
     std::unique_ptr<SpaceGame> game = std::make_unique<SpaceGame>();
     game->Initialize();
 
     // initialize sounds
-    viper::GetEngine().GetAudio().AddSound("bass.wav", "bass");
-    viper::GetEngine().GetAudio().AddSound("snare.wav", "snare");
-    viper::GetEngine().GetAudio().AddSound("clap.wav", "clap");
-    viper::GetEngine().GetAudio().AddSound("close-hat.wav", "close-hat");
-    viper::GetEngine().GetAudio().AddSound("open-hat.wav", "open-hat");
+    Rex::GetEngine().GetAudio().AddSound("bass.wav", "bass");
+    Rex::GetEngine().GetAudio().AddSound("snare.wav", "snare");
+    Rex::GetEngine().GetAudio().AddSound("clap.wav", "clap");
+    Rex::GetEngine().GetAudio().AddSound("close-hat.wav", "close-hat");
+    Rex::GetEngine().GetAudio().AddSound("open-hat.wav", "open-hat");
+
+    //auto texture = Rex::Resources().Get();
+    std::shared_ptr<Rex::Texture> texture = std::make_shared<Rex::Texture>();
+    texture->load("Rosalina_by_Shigehisa_Nakaue.png", Rex::GetRenderer());
 
     // create stars
-    std::vector<viper::vec2> stars;
+    std::vector<Rex::vec2> stars;
     for (int i = 0; i < 100; i++) {
-        stars.push_back(viper::vec2{ viper::random::getReal() * 1280 , viper::random::getReal() * 1024 });
+        stars.push_back(Rex::vec2{ Rex::random::getReal() * 1280 , Rex::random::getReal() * 1024 });
     }
 
     SDL_Event e;
@@ -55,39 +59,25 @@ int main(int argc, char* argv[]) {
             }
         }
 
-        viper::GetEngine().Update();
-        game->Update(viper::GetEngine().GetTime().GetDeltaTime());
+        Rex::GetEngine().Update();
+        game->Update(Rex::GetEngine().GetTime().GetDeltaTime());
 
-        if (viper::GetEngine().GetInput().GetKeyPressed(SDL_SCANCODE_ESCAPE)) quit = true;
+        if (Rex::GetEngine().GetInput().GetKeyPressed(SDL_SCANCODE_ESCAPE)) quit = true;
 
         // draw
-        viper::vec3 color{ 0, 0, 0 };
-        viper::GetEngine().GetRenderer().SetColor(color.r, color.g, color.b);
-        viper::GetEngine().GetRenderer().Clear();
+        Rex::vec3 color{ 0, 0, 0 };
+        Rex::GetEngine().GetRenderer().SetColor(color.r, color.g, color.b);
+        Rex::GetEngine().GetRenderer().Clear();
 
-        game->Draw(viper::GetEngine().GetRenderer());
+        Rex::GetEngine().GetRenderer().DrawTexture(texture.get(), 30, 30);
+        game->Draw(Rex::GetEngine().GetRenderer());
 
-        viper::GetEngine().GetRenderer().Present();
+        Rex::GetEngine().GetRenderer().Present();
     }
 
     game->Shutdown();
     game.release();
-    viper::GetEngine().Shutdown();
+    Rex::GetEngine().Shutdown();
 
     return 0;
 }
-
-/*
-    viper::vec2 speedz{ -140.0f, 0.0f };
-    float length = speedz.Length();
-
-    for (auto& star : stars) {
-        star += speedz * viper::GetEngine().GetTime().GetDeltaTime();
-
-        if (star[0] > 1280) star[0] = 0;
-        if (star[0] < 0) star[0] = 1280;
-
-        viper::GetEngine().GetRenderer().SetColor((uint8_t)viper::random::getRandomInt(256), viper::random::getRandomInt(256), viper::random::getRandomInt(256));
-        viper::GetEngine().GetRenderer().DrawPoint(star.x, star.y);
-    }
-*/

@@ -2,7 +2,7 @@
 #include "Math.h"
 #include <cassert>
 
-namespace viper {
+namespace Rex {
 	template<typename T>
 	struct Vector3
 	{
@@ -47,7 +47,7 @@ namespace viper {
 		/// Calculates the length (magnitude) of the vector.
 		/// </summary>
 		/// <returns>The length of the vector as a floating-point value.</returns>
-		float Length() const { return viper::math::sqrtf(LengthSqr()); }
+		float Length() const { return Rex::math::sqrtf(LengthSqr()); }
 	};
 
 	using ivec3 = Vector3<int>;

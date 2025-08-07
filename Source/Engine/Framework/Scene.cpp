@@ -3,21 +3,21 @@
 #include "../Core/StringHelper.h"
 #include "../Renderer/Renderer.h"
 
-namespace viper {
+namespace Rex {
 	/// <summary>
 	/// Updates all actors in the scene by advancing their state based on the elapsed time.
 	/// </summary>
 	/// <param name="dt">The time elapsed since the last update, in seconds.</param>
 	void Scene::Update(float dt) {
 		// update all actors
-		for (auto& actor : m_actors) {
+		for (auto& actor : s_actors) {
 			actor->Update(dt);
 		}
 
 		// remove destroyed actors
-		for (auto iter = m_actors.begin(); iter != m_actors.end(); ) {
+		for (auto iter = s_actors.begin(); iter != s_actors.end(); ) {
 			if ((*iter)->destroyed) {
-				iter = m_actors.erase(iter);
+				iter = s_actors.erase(iter);
 			}
 			else {
 				iter++;
@@ -25,8 +25,8 @@ namespace viper {
 		}
 
 		// check for collisions
-		for (auto& actorA : m_actors) {
-			for (auto& actorB : m_actors) {
+		for (auto& actorA : s_actors) {
+			for (auto& actorB : s_actors) {
 				if (actorA == actorB || (actorA->destroyed || actorB->destroyed)) continue;
 
 				float distance = (actorA->transform.position - actorB->transform.position).Length();
@@ -44,7 +44,7 @@ namespace viper {
 	/// </summary>
 	/// <param name="renderer">The renderer used to draw the actors.</param>
 	void Scene::Draw(Renderer& renderer) {
-		for (auto& actor : m_actors) {
+		for (auto& actor : s_actors) {
 			actor->Draw(renderer);
 		}
 	}
@@ -56,11 +56,11 @@ namespace viper {
 	void Scene::AddActor(std::unique_ptr<Actor> actor)
 	{
 		actor->scene = this;
-		m_actors.push_back(std::move(actor));
+		s_actors.push_back(std::move(actor));
 	}
 
 	void Scene::RemoveAllActors()
 	{
-		m_actors.clear();
+		s_actors.clear();
 	}
 }

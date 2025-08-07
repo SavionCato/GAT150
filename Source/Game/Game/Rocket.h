@@ -1,13 +1,13 @@
 #pragma once
 #include "Framework/Actor.h"
 
-class Rocket : public viper::Actor {
+class Rocket : public Rex::Actor {
 public:
 	float speed = 200;
 
 public:
 	Rocket() = default;
-	Rocket(const viper::Transform& transform, std::shared_ptr<viper::Model> model) :
+	Rocket(const Rex::Transform& transform, std::shared_ptr<Rex::Model> model) :
 		Actor{ transform, model }
 	{
 	}

@@ -4,7 +4,7 @@
 #include <cstdlib>
 #include <random>
 
-namespace viper::random {
+namespace Rex::random {
     inline std::mt19937& generator() {
         static std::random_device rd;
         static std::mt19937 gen(rd());

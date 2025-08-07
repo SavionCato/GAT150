@@ -4,43 +4,38 @@
 #include "Audio/AudioSystem.h"
 #include "Renderer/ParticleSystem.h"
 
-namespace viper {
-
-	Engine& GetEngine()
-	{
-		static Engine engine;
-		return engine;
-	}
+namespace Rex {
 
 	bool Engine::Initialize() {
-		m_renderer = std::make_unique<viper::Renderer>();
-		m_renderer->Initialize();
-		m_renderer->CreateWindow("Please don't blow up", 1280, 1024);
 
-		m_input = std::make_unique<viper::InputSystem>();
-		m_input->Initialize();
+		s_renderer = std::make_unique<Rex::Renderer>();
+		s_renderer->Initialize();
+		s_renderer->CreateWindow("Please don't blow up", 1280, 1024);
 
-		m_audio = std::make_unique<viper::AudioSystem>();
-		m_audio->Initialize();
+		s_input = std::make_unique<Rex::InputSystem>();
+		s_input->Initialize();
 
-		m_particleSystem = std::make_unique<viper::ParticleSystem>();
-		m_particleSystem->Initialize(5000);
+		s_audio = std::make_unique<Rex::AudioSystem>();
+		s_audio->Initialize();
+
+		s_particleSystem = std::make_unique<Rex::ParticleSystem>();
+		s_particleSystem->Initialize(5000);
 
 		return true;
 	}
 
 	void Engine::Shutdown() {
-		m_particleSystem->Shutdown();
-		m_audio->Shutdown();
-		m_input->Shutdown();
-		m_renderer->Shutdown();
+		s_particleSystem->Shutdown();
+		s_audio->Shutdown();
+		s_input->Shutdown();
+		s_renderer->Shutdown();
 	}
 
 	void Engine::Update() {
-		m_time.Tick();
-		m_input->Update();
-		m_audio->Update();
-		m_particleSystem->Update(m_time.GetDeltaTime());
+		s_time.Tick();
+		s_input->Update();
+		s_audio->Update();
+		s_particleSystem->Update(s_time.GetDeltaTime());
 	}
 
 	void Engine::Draw()

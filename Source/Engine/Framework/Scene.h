@@ -5,13 +5,13 @@
 #include <list>
 #include <memory>
 
-namespace viper {
+namespace Rex {
 	class Actor;
 	class Game;
 
 	class Scene {
 	public:
-		Scene(Game* game) : m_game{ game } {}
+		Scene(Game* game) : s_game{ game } {}
 
 		void Update(float dt);
 		void Draw(class Renderer& renderer);
@@ -25,11 +25,11 @@ namespace viper {
 		template<typename T = Actor>
 		std::vector<T*> GetActorsByTag(const std::string& tag);
 
-		Game* GetGame() { return m_game; }
+		Game* GetGame() { return s_game; }
 
 	private:
-		Game* m_game{ nullptr };
-		std::list<std::unique_ptr<Actor>> m_actors;
+		Game* s_game{ nullptr };
+		std::list<std::unique_ptr<Actor>> s_actors;
 	};
 
 	/// <summary>
@@ -41,8 +41,8 @@ namespace viper {
 	template<typename T>
 	inline T* Scene::GetActorByName(const std::string& name)
 	{
-		for (auto& actor : m_actors) {
-			if (viper::tolower(actor->name) == viper::tolower(name)) {
+		for (auto& actor : s_actors) {
+			if (Rex::tolower(actor->name) == Rex::tolower(name)) {
 				T* object = dynamic_cast<T*>(actor.get());
 				if (object) {
 					return object;
@@ -63,8 +63,8 @@ namespace viper {
 	inline std::vector<T*> Scene::GetActorsByTag(const std::string& tag)
 	{
 		std::vector<T*> results;
-		for (auto& actor : m_actors) {
-			if (viper::tolower(actor->tag) == viper::tolower(tag)) {
+		for (auto& actor : s_actors) {
+			if (Rex::tolower(actor->tag) == Rex::tolower(tag)) {
 				T* object = dynamic_cast<T*>(actor.get());
 				if (object) {
 					results.push_back(object);
