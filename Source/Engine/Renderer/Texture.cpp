@@ -1,4 +1,5 @@
 #include "Texture.h"
+#include "Core/Logger.h"
 
 namespace Rex {
 
@@ -11,19 +12,20 @@ namespace Rex {
 
         // load image onto surface
         SDL_Surface* surface = IMG_Load(filename.c_str());
-        if (surface == nullptr)
-        {
-            std::cerr << "Could not load image: " << filename << std::endl;
+        if (surface == nullptr) {
+
+            Rex::Logger::Error("Could not load image: " , filename);
             return false;
         }
 
         // create texture from surface, texture is a friend class of renderer
         s_texture = SDL_CreateTextureFromSurface(renderer.s_renderer, surface);
+
         // once texture is created, surface can be freed up
         SDL_DestroySurface(surface);
         if (s_texture == nullptr) {
 
-            std::cerr << "Could not create texture: " << filename << std::endl;
+            Rex::Logger::Error("Could not create texture: " , filename);
             return false;
         }
         
@@ -37,5 +39,4 @@ namespace Rex {
 
 		return size;
 	}
-
 }

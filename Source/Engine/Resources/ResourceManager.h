@@ -2,6 +2,7 @@
 #include "Core/StringHelper.h"
 #include "Core/Singleton.h"
 #include "Resource.h"
+#include "Core/Logger.h"
 
 #include <string>
 #include <map>
@@ -54,7 +55,7 @@ namespace Rex {
 			auto resource = std::dynamic_pointer_cast<T>(base);
 			if (resource == nullptr) {
 
-				std::cerr << "Resorce type mismatch: " << key << std::endl;
+				Rex::Logger::Error("Resorce type mismatch: " + key);
 				return res_t<T>();
 			}
 
@@ -64,7 +65,7 @@ namespace Rex {
 		res_t<T> resource = std::make_shared<T>();
 		if (resource->Load(name, std::forward<Args>(args)...) == false) {
 
-			std::cerr << "Could not load resource: " << key << std::endl;
+			Rex::Logger::Error("Could not load resource: " + key);
 			return res_t<T>();
 		}
 

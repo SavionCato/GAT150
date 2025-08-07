@@ -1,27 +1,24 @@
 #include "AudioSystem.h"
+#include "Core/Logger.h"
 #include "../Core/StringHelper.h"
+
 #include <fmod_errors.h>
 #include <iostream>
+#include <string>
 
 namespace Rex {
-	/// <summary>
-	/// Checks if an FMOD operation was successful and logs an error message if it was not.
-	/// </summary>
-	/// <param name="result">The FMOD_RESULT value returned by an FMOD function call.</param>
-	/// <returns>True if the FMOD operation was successful (FMOD_OK); otherwise, false.</returns>
+	
 	bool AudioSystem::CheckFMODResult(FMOD_RESULT result) {
+
 		if (result != FMOD_OK) {
-			std::cerr << FMOD_ErrorString(result) << std::endl;
+
+			Rex::Logger::Error(" ", std::string(FMOD_ErrorString(result)));
 			return false;
 		}
 
 		return true;
 	}
 
-	/// <summary>
-	/// Initializes the audio system using FMOD.
-	/// </summary>
-	/// <returns>True if the audio system was successfully initialized; otherwise, false.</returns>
 	bool AudioSystem::Initialize() {
 
 		FMOD_RESULT result = FMOD::System_Create(&s_system);
@@ -33,27 +30,15 @@ namespace Rex {
 
 		return true;
 	}
-
-	/// <summary>
-	/// Shuts down the audio system and releases associated resources.
-	/// </summary>
+		
 	void AudioSystem::Shutdown() {
 		CheckFMODResult(s_system->release());
 	}
-
-	/// <summary>
-	/// Updates the audio system state by processing pending audio operations.
-	/// </summary>
+		
 	void AudioSystem::Update() {
 		CheckFMODResult(s_system->update());
 	}
 
-	/// <summary>
-	/// Attempts to add a new sound to the audio system from a file, associating it with a specified name or the filename if no name is provided.
-	/// </summary>
-	/// <param name="filename">The path to the audio file to load.</param>
-	/// <param name="name">The name to associate with the loaded sound. If empty, the filename is used as the key.</param>
-	/// <returns>Returns false if the sound could not be added (e.g., if the name already exists or loading fails).</returns>
 	bool AudioSystem::AddSound(const std::string& filename, const std::string& name)
 	{
 		std::string key = (name.empty()) ? filename : name;
@@ -61,7 +46,8 @@ namespace Rex {
 
 		// check if key exists in sounds map
 		if (s_sounds.find(key) != s_sounds.end()) {
-			std::cerr << "Audio System : name already exists " << key << std::endl;
+
+			Rex::Logger::Error("Audio System : name already exists " , key);
 			return false;
 		}
 
@@ -83,7 +69,8 @@ namespace Rex {
 
 		// check if sound exists in sounds map
 		if (s_sounds.find(key) == s_sounds.end()) {
-			std::cerr << "Audio System : name doesn't exists " << key << std::endl;
+
+			Rex::Logger::Error("Audio System : name doesn't exists " , key);
 			return false;
 		}
 

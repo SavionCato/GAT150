@@ -2,11 +2,7 @@
 #include <string>
 
 namespace Rex {
-	/// <summary>
-	/// Converts all characters in a string to lowercase.
-	/// </summary>
-	/// <param name="str">The input string to convert.</param>
-	/// <returns>A new string with all characters converted to lowercase.</returns>
+	
 	inline std::string tolower(const std::string& str) {
 		std::string result = str;
 
@@ -28,5 +24,4 @@ namespace Rex {
 
 		return result;
 	}
-
 }
