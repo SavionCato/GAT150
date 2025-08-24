@@ -1,16 +1,19 @@
 #pragma once
 #include "../Core/StringHelper.h"
+
 #include <string>
 #include <vector>
 #include <list>
 #include <memory>
 
 namespace Rex {
+
 	class Actor;
 	class Game;
 
 	class Scene {
 	public:
+
 		Scene(Game* game) : s_game{ game } {}
 
 		void Update(float dt);
@@ -26,25 +29,22 @@ namespace Rex {
 		std::vector<T*> GetActorsByTag(const std::string& tag);
 
 		Game* GetGame() { return s_game; }
-
 	private:
+
 		Game* s_game{ nullptr };
 		std::list<std::unique_ptr<Actor>> s_actors;
 	};
 
-	/// <summary>
-	/// Retrieves an actor from the scene by name and casts it to the specified type.
-	/// </summary>
-	/// <typeparam name="T">The type to which the found actor should be cast.</typeparam>
-	/// <param name="name">The name of the actor to search for (case-insensitive).</param>
-	/// <returns>A pointer to the actor cast to type T if found and the cast is successful; otherwise, nullptr.</returns>
 	template<typename T>
-	inline T* Scene::GetActorByName(const std::string& name)
-	{
+	inline T* Scene::GetActorByName(const std::string& name) {
+
 		for (auto& actor : s_actors) {
+
 			if (Rex::tolower(actor->name) == Rex::tolower(name)) {
+
 				T* object = dynamic_cast<T*>(actor.get());
 				if (object) {
+
 					return object;
 				}
 			}
@@ -53,20 +53,17 @@ namespace Rex {
 		return nullptr;
 	}
 
-	/// <summary>
-	/// Retrieves all actors in the scene with a tag matching the specified value and of the specified type.
-	/// </summary>
-	/// <typeparam name="T">The type to which actors should be cast. Only actors of this type are included in the results.</typeparam>
-	/// <param name="tag">The tag to match against each actor's tag (case-insensitive).</param>
-	/// <returns>A vector of pointers to actors of type T whose tag matches the specified tag.</returns>
 	template<typename T>
-	inline std::vector<T*> Scene::GetActorsByTag(const std::string& tag)
-	{
+	inline std::vector<T*> Scene::GetActorsByTag(const std::string& tag) {
+
 		std::vector<T*> results;
 		for (auto& actor : s_actors) {
+
 			if (Rex::tolower(actor->tag) == Rex::tolower(tag)) {
+
 				T* object = dynamic_cast<T*>(actor.get());
 				if (object) {
+
 					results.push_back(object);
 				}
 			}

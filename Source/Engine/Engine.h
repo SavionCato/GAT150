@@ -10,12 +10,6 @@
 #include <memory>
 
 namespace Rex {
-
-	class Renderer;
-	class AudioSystem;
-	class InputSystem;
-	class ParticleSystem;
-
 	class Engine : Singleton<Engine> {
 	public:
 

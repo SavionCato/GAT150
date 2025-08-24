@@ -74,9 +74,9 @@ namespace Rex {
         SDL_RenderPoint(s_renderer, x, y);
     }
 
-    void Renderer::DrawTexture(Texture* texture, float x, float y, float angle ) {
+    void Renderer::DrawTexture(Texture& texture, float x, float y, float angle ) {
 
-        vec2 size = texture->GetSize();
+        vec2 size = texture.GetSize();
 
         SDL_FRect destRect;
         destRect.x = x;
@@ -84,7 +84,20 @@ namespace Rex {
         destRect.w = size.x;
         destRect.h = size.y;
 
-        SDL_RenderTexture(s_renderer, texture->s_texture, NULL, &destRect);
+        SDL_RenderTexture(s_renderer, texture.s_texture, NULL, &destRect);
+    }
+
+    void Renderer::DrawTexture(Texture& texture, float x, float y, float scale, float angle) {
+
+        vec2 size = texture.GetSize();
+
+        SDL_FRect destRect;
+        destRect.w = size.x * scale;
+        destRect.h = size.y * scale;
+        destRect.x = x - destRect.w * 0.5f;
+        destRect.y = y - destRect.h * 0.5f;
+
+        SDL_RenderTextureRotated(s_renderer, texture.s_texture, NULL, &destRect, angle, NULL, SDL_FLIP_NONE);
     }
 
     void Renderer::Clear()  {

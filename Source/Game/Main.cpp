@@ -32,15 +32,15 @@ int main(int argc, char* argv[]) {
     game->Initialize();
 
     // initialize sounds
-    Rex::GetEngine().GetAudio().AddSound("bass.wav", "bass");
+    /*Rex::GetEngine().GetAudio().AddSound("bass.wav", "bass");
     Rex::GetEngine().GetAudio().AddSound("snare.wav", "snare");
     Rex::GetEngine().GetAudio().AddSound("clap.wav", "clap");
     Rex::GetEngine().GetAudio().AddSound("close-hat.wav", "close-hat");
-    Rex::GetEngine().GetAudio().AddSound("open-hat.wav", "open-hat");
+    Rex::GetEngine().GetAudio().AddSound("open-hat.wav", "open-hat");*/
 
-    //auto texture = Rex::Resources().Get();
-    std::shared_ptr<Rex::Texture> texture = std::make_shared<Rex::Texture>();
-    texture->load("Rosalina_by_Shigehisa_Nakaue.png", Rex::GetRenderer());
+    auto texture = Rex::Resources().Get<Rex::Texture>("Rosalina2.gif", Rex::GetRenderer());
+    /*std::shared_ptr<Rex::Texture> texture = std::make_shared<Rex::Texture>();
+    texture->load("Rosalina_by_Shigehisa_Nakaue.png", Rex::GetRenderer());*/
 
     // create stars
     std::vector<Rex::vec2> stars;
@@ -69,7 +69,7 @@ int main(int argc, char* argv[]) {
         Rex::GetEngine().GetRenderer().SetColor(color.r, color.g, color.b);
         Rex::GetEngine().GetRenderer().Clear();
 
-        Rex::GetEngine().GetRenderer().DrawTexture(texture.get(), 30, 30);
+        Rex::GetEngine().GetRenderer().DrawTexture(*texture.get(), 30, 30);
         game->Draw(Rex::GetEngine().GetRenderer());
 
         Rex::GetEngine().GetRenderer().Present();

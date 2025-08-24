@@ -8,7 +8,7 @@ namespace Rex {
         if (s_texture) SDL_DestroyTexture(s_texture);
 	}
 
-	bool Texture::load(const std::string& filename, class Renderer& renderer) {
+	bool Texture::Load(const std::string& filename, class Renderer& renderer) {
 
         // load image onto surface
         SDL_Surface* surface = IMG_Load(filename.c_str());

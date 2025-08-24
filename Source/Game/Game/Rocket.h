@@ -3,14 +3,16 @@
 
 class Rocket : public Rex::Actor {
 public:
+
 	float speed = 200;
 
 public:
+
 	Rocket() = default;
-	Rocket(const Rex::Transform& transform, std::shared_ptr<Rex::Model> model) :
-		Actor{ transform, model }
-	{
-	}
+	Rocket(const Rex::Transform& transform) :
+
+		Actor{ transform}
+	{}
 
 	void Update(float dt) override;
 

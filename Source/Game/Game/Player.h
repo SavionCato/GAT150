@@ -10,8 +10,9 @@ public:
 
 public:
 	Player() = default;
-	Player(const Rex::Transform& transform, std::shared_ptr<Rex::Model> model) :
-		Actor{ transform, model }
+	Player(const Rex::Transform& transform) :
+
+		Actor{transform}
 	{}
 
 	void Update(float dt) override;

@@ -37,15 +37,15 @@ namespace Rex {
 	template<typename T, typename ... Args>
 
 	inline res_t<T> ResourceManager::Get(const std::string& name, Args&& ... args) {
-
-		return GetWithId(name, name, std::forward<Args>(args)...);
+		
+		return GetWithId<T>(name, name, std::forward<Args>(args)...);
 	}
 
 	template<typename T, typename ... Args>
 
 	inline res_t<T> ResourceManager::GetWithId(const std::string& id, const std::string& name, Args&& ... args) {
 
-		std::string key = tolower(key);
+		std::string key = tolower(id);
 
 		auto iter = s_resource.find(key);
 		if (iter != s_resource.end()) {
@@ -55,7 +55,7 @@ namespace Rex {
 			auto resource = std::dynamic_pointer_cast<T>(base);
 			if (resource == nullptr) {
 
-				Rex::Logger::Error("Resorce type mismatch: " + key);
+				Rex::Logger::Error("Resorce type mismatch: " , key);
 				return res_t<T>();
 			}
 
@@ -65,7 +65,7 @@ namespace Rex {
 		res_t<T> resource = std::make_shared<T>();
 		if (resource->Load(name, std::forward<Args>(args)...) == false) {
 
-			Rex::Logger::Error("Could not load resource: " + key);
+			Rex::Logger::Error("Could not load resource: " , key);
 			return res_t<T>();
 		}
 

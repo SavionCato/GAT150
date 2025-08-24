@@ -12,7 +12,7 @@ namespace Rex {
 		Texture() = default;
 		~Texture();
 
-		bool load(const std::string& filename, class Renderer& renderer);
+		bool Load(const std::string& filename, class Renderer& renderer);
 
 		vec2 GetSize();
 

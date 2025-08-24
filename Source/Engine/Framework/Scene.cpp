@@ -1,36 +1,52 @@
 #include "Scene.h"
 #include "Actor.h"
+#include "Components/CircleCollider.h"
 #include "../Core/StringHelper.h"
 #include "../Renderer/Renderer.h"
 
 namespace Rex {
-	/// <summary>
-	/// Updates all actors in the scene by advancing their state based on the elapsed time.
-	/// </summary>
-	/// <param name="dt">The time elapsed since the last update, in seconds.</param>
+	
 	void Scene::Update(float dt) {
-		// update all actors
+		
 		for (auto& actor : s_actors) {
-			actor->Update(dt);
+
+			if (actor->active) {
+
+				actor->Update(dt);
+			}
 		}
 
-		// remove destroyed actors
 		for (auto iter = s_actors.begin(); iter != s_actors.end(); ) {
+
 			if ((*iter)->destroyed) {
+
 				iter = s_actors.erase(iter);
-			}
-			else {
+			}else {
+
 				iter++;
 			}
 		}
 
-		// check for collisions
 		for (auto& actorA : s_actors) {
+
 			for (auto& actorB : s_actors) {
+
 				if (actorA == actorB || (actorA->destroyed || actorB->destroyed)) continue;
+
+				auto colliderA = actorA->GetComponent<CircleCollider2D>();
+				auto colliderB = actorB->GetComponent<CircleCollider2D>();
+
+				if (!colliderA || !colliderB) continue;
+
+				if (colliderA->CheckCollider(*colliderB)) {
+
+					actorA->OnCollision(actorB.get());
+					actorB->OnCollision(actorA.get());
+				}
 
 				float distance = (actorA->transform.position - actorB->transform.position).Length();
 				if (distance <= actorA->GetRadius() + actorB->GetRadius()) {
+
 					actorA->OnCollision(actorB.get());
 					actorB->OnCollision(actorA.get());
 				}
@@ -39,28 +55,25 @@ namespace Rex {
 
 	}
 
-	/// <summary>
-	/// Draws all actors in the scene using the specified renderer.
-	/// </summary>
-	/// <param name="renderer">The renderer used to draw the actors.</param>
 	void Scene::Draw(Renderer& renderer) {
+
 		for (auto& actor : s_actors) {
-			actor->Draw(renderer);
+
+			if (actor->active) {
+
+				actor->Draw(renderer);
+			}
 		}
 	}
 
-	/// <summary>
-	/// Adds an actor to the scene by transferring ownership of the actor.
-	/// </summary>
-	/// <param name="actor">A unique pointer to the actor to be added. Ownership of the actor is transferred to the scene.</param>
-	void Scene::AddActor(std::unique_ptr<Actor> actor)
-	{
+	void Scene::AddActor(std::unique_ptr<Actor> actor) {
+		
 		actor->scene = this;
 		s_actors.push_back(std::move(actor));
 	}
 
-	void Scene::RemoveAllActors()
-	{
+	void Scene::RemoveAllActors() {
+
 		s_actors.clear();
 	}
 }

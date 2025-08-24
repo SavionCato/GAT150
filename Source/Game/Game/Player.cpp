@@ -1,16 +1,17 @@
 #include "Player.h"
 #include "Rocket.h"
 #include "Engine.h"
+#include "EnginePCH.h"
 #include "SpaceGame.h"
 #include "GameData.h"
-#include "Math/Vector3.h"
+#include "Audio/AudioSystem.h"
 #include "Core/Random.h"
+#include "Input/InputSystem.h"
 #include "Framework/Scene.h"
 #include "Renderer/Renderer.h"
 #include "Renderer/ParticleSystem.h"
 #include "Renderer/Model.h"
-#include "Input/InputSystem.h"
-#include "Audio/AudioSystem.h"
+#include "Math/Vector3.h"
 
 void Player::Update(float dt)
 {
@@ -35,7 +36,11 @@ void Player::Update(float dt)
 
     Rex::vec2 direction{ 1, 0 };
     Rex::vec2 force = direction.Rotate(Rex::math::degToRad(transform.rotation)) * thrust * speed;
-    velocity += force * dt;
+    auto* rb = GetComponent<Rex::RigidBody>();
+    if (rb) {
+
+        rb->velocity += force * dt;
+    }
 
     transform.position.x = Rex::math::wrap(transform.position.x, 0.0f, (float)Rex::GetEngine().GetRenderer().GetWidth());
     transform.position.y = Rex::math::wrap(transform.position.y, 0.0f, (float)Rex::GetEngine().GetRenderer().GetHeight());
@@ -43,18 +48,26 @@ void Player::Update(float dt)
     // check fire key pressed
     fireTimer -= dt;
     if (Rex::GetEngine().GetInput().GetKeyDown(SDL_SCANCODE_SPACE) && fireTimer <= 0) {
+
         fireTimer = fireTime;
 
-        Rex::GetEngine().GetAudio().PlaySound("clap");
-
-        std::shared_ptr<Rex::Model> model = std::make_shared<Rex::Model>(GameData::shipPoints, Rex::vec3{ 1.0f, 1.0f, 1.0f });
         // spawn rocket at player position and rotation
-        Rex::Transform transform{ this->transform.position, this->transform.rotation, 2.0f };
-        auto rocket = std::make_unique<Rocket>(transform, model);
+        Rex::Transform transform{ this->transform.position, this->transform.rotation, 0.09f };
+        auto rocket = std::make_unique<Rocket>(transform);
         rocket->speed = 1500.0f;
         rocket->lifespan = 1.5f;
         rocket->name = "rocket";
         rocket->tag = "player";
+
+        auto spriteRenderer = std::make_unique<Rex::SpriteRenderer>();
+        spriteRenderer->TextureName = "Green_Star.png";
+        auto rb = std::make_unique<Rex::RigidBody>();
+        auto collider = std::make_unique<Rex::CircleCollider2D>();
+        collider->radius = 10;
+
+        rocket->AddComponent(std::move(rb));
+        rocket->AddComponent(std::move(spriteRenderer));
+        rocket->AddComponent(std::move(collider));
 
         scene->AddActor(std::move(rocket));
     }
@@ -62,9 +75,10 @@ void Player::Update(float dt)
     Actor::Update(dt);
 }
 
-void Player::OnCollision(Actor* other)
-{
+void Player::OnCollision(Actor* other) {
+
     if (tag != other->tag) {
+
         destroyed = true;
         dynamic_cast<SpaceGame*>(scene->GetGame())->OnPlayerDeath();
     }

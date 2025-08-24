@@ -6,6 +6,7 @@
 namespace Rex {
 	class AudioSystem {
 	public:
+
 		AudioSystem() = default;
 
 		bool Initialize();
@@ -15,11 +16,14 @@ namespace Rex {
 
 		bool AddSound(const std::string& filename, const std::string& name = "");
 		bool PlaySound(const std::string& name);
-
+		bool PlaySound(class AudioClip& audioClip);
 	private:
-		bool CheckFMODResult(FMOD_RESULT result);
 
+		static bool CheckFMODResult(FMOD_RESULT result);
 	private:
+
+		friend class AudioClip;
+
 		FMOD::System* s_system = nullptr;
 		std::map<std::string, FMOD::Sound*> s_sounds;
 	};

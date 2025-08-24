@@ -1,4 +1,5 @@
 #include "AudioSystem.h"
+#include "AudioClip.h"
 #include "Core/Logger.h"
 #include "../Core/StringHelper.h"
 
@@ -44,19 +45,16 @@ namespace Rex {
 		std::string key = (name.empty()) ? filename : name;
 		key = tolower(key);
 
-		// check if key exists in sounds map
 		if (s_sounds.find(key) != s_sounds.end()) {
 
-			Rex::Logger::Error("Audio System : name already exists " , key);
+			Rex::Logger::Error("Audio System : name already exists {}" , key);
 			return false;
 		}
 
-		// create sound from key
 		FMOD::Sound* sound = nullptr;
 		FMOD_RESULT result = s_system->createSound(filename.c_str(), FMOD_DEFAULT, 0, &sound);
 		if (!CheckFMODResult(result)) return false;
 
-		// insert sound into map
 		s_sounds[key] = sound;
 
 		return true;
@@ -70,12 +68,20 @@ namespace Rex {
 		// check if sound exists in sounds map
 		if (s_sounds.find(key) == s_sounds.end()) {
 
-			Rex::Logger::Error("Audio System : name doesn't exists " , key);
+			Rex::Logger::Error("Audio System : name doesn't exists {}" , key);
 			return false;
 		}
 
 		// play sound from key
 		FMOD_RESULT result = s_system->playSound(s_sounds[key], 0, false, nullptr);
+		if (!CheckFMODResult(result)) return false;
+
+		return true;
+	}
+
+	bool AudioSystem::PlaySound(AudioClip& audioClip) {
+
+		FMOD_RESULT result = s_system->playSound(audioClip.s_sound, 0, false, nullptr);
 		if (!CheckFMODResult(result)) return false;
 
 		return true;

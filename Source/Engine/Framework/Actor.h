@@ -1,13 +1,17 @@
 #pragma once
 #include "../Math/Transform.h"
 #include "Renderer/Texture.h"
+#include "Object.h"
+#include "Component.h"
+
+
 #include <string>
 #include <memory>
 
 namespace Rex {
-	class Actor {
+	class Actor : public Object {
 	public:
-		std::string name;
+
 		std::string tag;
 
 		vec2 velocity{ 0, 0 };
@@ -19,12 +23,12 @@ namespace Rex {
 
 		Transform transform;
 		class Scene* scene{ nullptr };
-
 	public:
+
 		Actor() = default;
-		Actor(const Transform& transform, std::shared_ptr<class Model> model) :
-			transform{ transform },
-			s_model{ model }
+		Actor(const Transform& transform) :
+
+			transform{ transform }
 		{}
 
 		virtual void Update(float dt);
@@ -34,10 +38,41 @@ namespace Rex {
 
 		float GetRadius();
 
+		void AddComponent(std::unique_ptr<Component> component);
+
+		template<typename T>
+		T* GetComponent();
+
+		template<typename T>
+		std::vector<T*> GetComponents();
 	protected:
 
-		res_t<Texture> s_texture;
-
-		std::shared_ptr<Model> s_model;
+		std::vector<std::unique_ptr<Component>> s_components;
+		
 	};
+
+	template<typename T>
+	inline T* Actor::GetComponent() {
+
+		for (auto& component : s_components) {
+
+			auto result = dynamic_cast<T*>(component.get());
+			if (result) return result;
+		}
+		return nullptr;
+	}
+
+	template<typename T>
+	inline std::vector<T*> Actor::GetComponents() {
+
+
+		std::vector<T*> results;
+		for (auto& component : s_components) {
+
+			auto result = dynamic_cast<T*>(component.get());
+			if (result) results.push_back(result);
+		}
+		
+		return;
+	}
 }

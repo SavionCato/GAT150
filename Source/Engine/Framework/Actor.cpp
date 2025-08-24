@@ -1,9 +1,10 @@
 #include "Actor.h"
 #include "../Renderer/Model.h"
+#include "Components/RendererComponent.h"
 
 namespace Rex {
-	void Actor::Update(float dt)
-	{
+	void Actor::Update(float dt) {
+
 		if (destroyed) return;
 
 		if (lifespan != 0) {
@@ -11,19 +12,41 @@ namespace Rex {
 			destroyed = lifespan <= 0;
 		}
 
-		transform.position += velocity * dt;
-		velocity *= (1.0f / (1.0f + damping * dt));
+		for(auto& component : s_components){
+
+			if (component->active) {
+
+				component->Update(dt);
+			}
+		}
 	}
 
-	void Actor::Draw(Renderer& renderer)
-	{
+	void Actor::Draw(Renderer& renderer) {
+
 		if (destroyed) return;
 
-		s_model->Draw(renderer, transform);
+		for (auto& component : s_components) {
+
+			if (component->active) {
+
+				auto rendererComponent = dynamic_cast<RendererComponent*>(component.get());
+				
+				if (rendererComponent) {
+
+					rendererComponent->Draw(renderer);
+				}				
+			}
+		}
 	}
 
-	float Actor::GetRadius()
-	{
-		return (s_model) ? s_model->GetRadius() * transform.scale * 0.9f : 0;
+	float Actor::GetRadius() {
+
+		return  50.0f;
+	}
+
+	void Actor::AddComponent(std::unique_ptr<class Component> component) {
+
+		component->owner = this;
+		s_components.push_back(std::move(component));
 	}
 }

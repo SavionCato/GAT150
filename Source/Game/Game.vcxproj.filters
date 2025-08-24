@@ -8,11 +8,11 @@
     <Filter Include="Source\Game">
       <UniqueIdentifier>{3ce2fbdd-d881-49b4-bded-eb13fc4d5a0f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Main&amp;GamePCH">
+      <UniqueIdentifier>{083fe2b4-1bcc-4331-aa11-346b43df58d1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Main.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Rocket.cpp">
       <Filter>Source\Game</Filter>
     </ClCompile>
@@ -27,6 +27,12 @@
     </ClCompile>
     <ClCompile Include="Game\Player.cpp">
       <Filter>Source\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="GamePCH.cpp">
+      <Filter>Source\Main&amp;GamePCH</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>Source\Main&amp;GamePCH</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -44,6 +50,9 @@
     </ClInclude>
     <ClInclude Include="Game\GameData.h">
       <Filter>Source\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="GamePCH.h">
+      <Filter>Source\Main&amp;GamePCH</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
